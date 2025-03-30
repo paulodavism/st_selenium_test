@@ -1,5 +1,6 @@
 import streamlit as st
-from seleniumbase import Driver
+from selenium import webdriver
+from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 import platform
 
 """
@@ -13,9 +14,13 @@ Este é um exemplo de como fazer web scraping usando SeleniumBase com Chrome/Chr
 @st.cache_resource
 def get_driver():
     if platform.system() == "Linux":
-        # Usando um driver remoto (exemplo com Selenium Grid)
-        return Driver(uc=True, headless=True, browser="chrome", remote=True, remote_url="http://<remote-url>:<port>/wd/hub")
-    return Driver(uc=True, headless=True)
+        # Configuração para usar o Selenium Grid ou um driver remoto
+        capabilities = DesiredCapabilities.CHROME.copy()
+        capabilities['goog:chromeOptions'] = {
+            'args': ['--headless', '--no-sandbox', '--disable-dev-shm-usage']
+        }
+        return webdriver.Remote(command_executor='http://<remote-url>:<port>/wd/hub', desired_capabilities=capabilities)
+    return webdriver.Chrome()
 
 try:
     driver = get_driver()
