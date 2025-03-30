@@ -13,7 +13,8 @@ Este é um exemplo de como fazer web scraping usando SeleniumBase com Chrome/Chr
 @st.cache_resource
 def get_driver():
     if platform.system() == "Linux":
-        return Driver(uc=True, headless=True, browser="chrome")
+        # Usando um driver remoto (exemplo com Selenium Grid)
+        return Driver(uc=True, headless=True, browser="chrome", remote=True, remote_url="http://<remote-url>:<port>/wd/hub")
     return Driver(uc=True, headless=True)
 
 try:
